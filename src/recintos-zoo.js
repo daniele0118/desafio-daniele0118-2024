@@ -66,17 +66,17 @@ class RecintosZoo {
     recintos = this.loteInteiro(animalEncontrado, quantidade, recintos);
 
     const recintosViaveis = recintos.map(recinto => {
-      const espacoOcupado = this.calcularEspacoOcupado(recinto);
-      const espacoLivre = recinto.tamanho - this.calcularEspacoOcupado(recinto) - (quantidade * animalEncontrado.tamanho);
-
+      const espacoOcupado = this.calcularEspacoOcupado(recinto, animalEncontrado.especie);
+const espacoLivre = recinto.tamanho - this.calcularEspacoOcupado(recinto, animalEncontrado.especie) - (quantidade * animalEncontrado.tamanho);
 
       return `Recinto ${recinto.numero} (espaço livre: ${espacoLivre} total: ${recinto.tamanho})`;
   });
 
-      //Regra recinto viável
-      if (recintos.length === 0) {
-        return new Resultado("Não há recinto viável", null);
-      }
+
+    //Regra recinto viável
+    if (recintos.length === 0) {
+      return new Resultado("Não há recinto viável", null);
+    }
 
     return new Resultado(null, recintosViaveis);
   }
@@ -117,14 +117,10 @@ class RecintosZoo {
     });
 }
 
-calcularEspacoOcupado(recinto) {
+calcularEspacoOcupado(recinto, especieAdicionada) {
   let espacoOcupado = 0;
   const especiesNoRecinto = recinto.animaisExistentes.size;
 
-  // Log para ver o conteúdo do recinto
-  console.log('Espécies no recinto:', recinto.animaisExistentes);
-
-  // Calcula o espaço ocupado por todos os animais no recinto
   recinto.animaisExistentes.forEach((quantidade, especie) => {
     const animal = this.listaAnimais.find(a => a.especie === especie);
     if (animal) {
@@ -132,14 +128,12 @@ calcularEspacoOcupado(recinto) {
     }
   });
 
-  // Se houver mais de uma espécie, adiciona o espaço extra
   if (especiesNoRecinto > 1) {
-    espacoOcupado += 1; // Regra: espaço extra quando há mais de uma espécie
+    espacoOcupado += 1;
   }
 
   return espacoOcupado;
 }
-
   
 }
 
